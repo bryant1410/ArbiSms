@@ -31,8 +31,8 @@ class scrapyd(object):
             raise scrapyd_exception
 
     def validate_response(self, response):
-        if not isinstance(response, dict) and response['status'] == 'ok':
-            raise scrapyd
+        if not isinstance(response, dict) or response['status'] != 'ok':
+            raise scrapyd_exception('Response could not be interpreted')
 
     def list_projects(self):
         """
