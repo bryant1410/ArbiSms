@@ -40,7 +40,7 @@ class scrapyd(object):
         """
         response = requests.get(url=urljoin(self.url, "listprojects.json"),
                                 headers={'Content-Type': 'application/json'}, timeout=self.timeout)
-        result = response.json
+        result = response.json()
         self.validate_response(result)
         return result['projects']
 
@@ -51,7 +51,7 @@ class scrapyd(object):
         if project in self.list_projects():
             response = requests.get(self.url + 'listversions.json?project=' + project,
                                     headers={'Content-Type': 'application/json'}, timeout=self.timeout)
-            result = response.json
+            result = response.json()
             self.validate_response(result)
             return result['versions']
         else:
@@ -64,7 +64,7 @@ class scrapyd(object):
         if project in self.list_projects():
             response = requests.get(self.url + 'listspiders.json?project=' + project,
                                     headers={'Content-Type': 'application/json'}, timeout=self.timeout)
-            result = response.json
+            result = response.json()
             self.validate_response(result)
             return result['spiders']
         else:
@@ -74,7 +74,7 @@ class scrapyd(object):
         if project in self.list_projects():
             response = requests.get(self.url + 'listjobs.json?project=' + project,
                                     headers={'Content-Type': 'application/json'}, timeout=self.timeout)
-            result = response.json
+            result = response.json()
             self.validate_response(result)
             return result
         else:
@@ -101,7 +101,7 @@ class scrapyd(object):
                     data['setting'] = 'HTTPCACHE_EXPIRATION_SECS=1'
 
                 response = requests.post(url=api_url, data=data)
-                result = response.json
+                result = response.json()
                 self.validate_response(result)
                 return {'result':result['jobid']}
             raise scrapyd_exception('no Spider Found')
@@ -111,7 +111,7 @@ class scrapyd(object):
         if project in self.list_projects():
             api_url = self.url + "cancel.json"
             data = {'project': project, 'job': job_id}
-            result = requests.post(url=api_url, data=data, timeout=self.timeout).json
+            result = requests.post(url=api_url, data=data, timeout=self.timeout).json()
             self.validate_response(result)
             return 'Crawler Stopped Successfully , Previous State of Spider was : %s' % result['prevstate']
         raise scrapyd_exception
@@ -119,7 +119,7 @@ class scrapyd(object):
     def delete_project(self, project):
         api_url = self.url + "delproject.json"
         data = {'project': project}
-        result = requests.post(url=api_url, data=data, timeout=self.timeout).json
+        result = requests.post(url=api_url, data=data, timeout=self.timeout).json()
         if 'status' in result and 'ok' in result['status']:
             return 'Success'
         else:
